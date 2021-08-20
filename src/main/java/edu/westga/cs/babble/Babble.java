@@ -20,14 +20,18 @@ public class Babble extends Application {
     
 	@Override
     public void start(Stage primaryStage) throws Exception {
-//        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-//        URL resource = classLoader.getResource(Babble.GUI_RESOURCE);
-//        FXMLLoader loader = new FXMLLoader(resource);
-//        Parent root = (Parent) loader.load();
-//        Scene scene = new Scene(root);
-//        primaryStage.setScene(scene);
-//        primaryStage.setTitle("Babble");
-//        primaryStage.show();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resource = classLoader.getResource(Babble.GUI_RESOURCE);
+        FXMLLoader loader = new FXMLLoader(resource);
+        
+        primaryStage.setTitle("Babble");
+		primaryStage.setResizable(false);
+        
+        Parent root = (Parent) loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Babble");
+        primaryStage.show();
     }
 
     /**
