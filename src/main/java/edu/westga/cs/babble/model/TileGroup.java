@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Creates the list of tiles
+ * Controls the list of tiles for play
  * @author lewisb
  * @version 2021.08.20
  */
