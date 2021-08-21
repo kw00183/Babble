@@ -3,7 +3,7 @@ package edu.westga.cs.babble.model;
 /**
  * A candidate word made up of tiles and their points
  * @author lewisb
- *
+ * @version 2021.08.20
  */
 public class PlayedWord extends TileGroup {
 
@@ -21,8 +21,8 @@ public class PlayedWord extends TileGroup {
 	 */
 	public int getScore() {
 		int score = 0;
-		for(Tile t: super.tiles()) {
-			score += t.getPointValue();
+		for (Tile tile: super.tiles()) {
+			score += tile.getPointValue();
 		}
 		return score;
 	}
