@@ -1,11 +1,9 @@
 package edu.westga.cs.babble.controllers;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
+import javafx.util.converter.NumberStringConverter;
 import edu.westga.cs.babble.model.EmptyTileBagException;
 
 import edu.westga.cs.babble.model.Tile;
@@ -80,7 +79,7 @@ public class BabbleController implements Initializable {
 	}
 
 	private void setScore() {
-		this.textFieldScore.setText(String.valueOf(this.score));
+		this.textFieldScore.textProperty().bindBidirectional(new SimpleIntegerProperty(this.score), new NumberStringConverter());
 	}
 
 	private void playWord() {
