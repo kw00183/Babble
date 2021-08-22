@@ -21,6 +21,8 @@ import edu.westga.cs.babble.model.TileBag;
 import edu.westga.cs.babble.model.TileNotInGroupException;
 import edu.westga.cs.babble.model.TileRack;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 /**
  * Controller for the Babble fxml view file
  * 
@@ -47,10 +49,12 @@ public class BabbleGuiController implements Initializable {
 
 	private TileRack tileRack;
 	private TileBag tileBag;
+	private int score;
 
 	public BabbleGuiController() {
 		this.listViewTiles = new ListView<Tile>();
 		this.listViewWord = new ListView<Tile>();
+		this.score = 0;
 		this.tileBag = new TileBag();
 		this.tileRack = new TileRack();
 	}
@@ -58,69 +62,107 @@ public class BabbleGuiController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.buttonReset.setOnAction(e -> this.resetWordTiles());
-		this.textFieldScore.setText("0");
+		this.buttonPlayWord.setOnAction(e -> this.playWord());
+		this.setScore();
 
-		try {
-			this.listViewTiles = this.getRandomTiles();
-			this.setTiles();
-			this.clickTiles();
-		} catch (EmptyTileBagException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		this.listViewTiles = this.createTileRack();
+		this.setTiles();
+		this.clickTiles();
 	}
-	
+
+	private void setScore() {
+		this.textFieldScore.setText(String.valueOf(this.score));
+	}
+
+	private void playWord() {
+		String word = "";
+		int points = 0;
+		boolean validWord = false;
+		for (Tile tile : this.listViewWord.getItems()) {
+			word += tile.getLetter();
+			points += tile.getPointValue();
+		}
+		WordDictionary dictionary = new WordDictionary();
+		validWord = dictionary.isValidWord(word);
+
+		if (validWord) {
+			this.score += points;
+			int wordLength = word.length();
+			this.drawNewTiles(wordLength);
+			this.listViewWord.getItems().clear();
+		} else {
+			showMessageDialog(null, "Not a valid word");
+		}
+		this.setScore();
+
+		System.out.println(validWord);
+	}
+
 	private void setWordTiles(Tile tile) {
 		this.listViewWord.getItems().add(tile);
-		this.listViewWord.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
-			
-			@Override
-			public ListCell<Tile> call(ListView<Tile> wordTiles) {
-				return new TileCharacterCell();
-			}
-		});
+		this.listViewWord
+				.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
+
+					@Override
+					public ListCell<Tile> call(ListView<Tile> wordTiles) {
+						return new TileCharacterCell();
+					}
+				});
 	}
 
 	private void resetWordTiles() {
-		for (int index = 0; index < this.listViewWord.getItems().size(); index++) {
+		for (int index = 0; index < this.listViewWord.getItems()
+				.size(); index++) {
 			this.tileRack.append(this.listViewWord.getItems().get(index));
 		}
 		this.setTiles();
 		this.listViewWord.getItems().clear();
 	}
 
-	private ListView<Tile> getRandomTiles() throws EmptyTileBagException {
-		for (int index = 0; index < TileRack.MAX_SIZE; index++) {
-			Tile randomTile = this.tileBag.drawTile();
-			this.tileRack.append(randomTile);
-		}
+	private ListView<Tile> createTileRack() {
+		this.drawNewTiles(TileRack.MAX_SIZE);
 		return this.listViewTiles;
 	}
-	
+
+	private void drawNewTiles(int numberOfTiles) {
+		for (int index = 0; index < numberOfTiles; index++) {
+			try {
+				if (!this.tileBag.isEmpty()) {
+					Tile randomTile = this.tileBag.drawTile();
+					this.tileRack.append(randomTile);
+				}
+			} catch (EmptyTileBagException exc) {
+				exc.printStackTrace();
+			}
+		}
+	}
+
 	private void setTiles() {
 		ObservableList<Tile> tiles = this.tileRack.tiles();
 		this.listViewTiles.setItems(tiles);
 
-		this.listViewTiles.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
-			@Override
-			public ListCell<Tile> call(ListView<Tile> tiles) {
-				return new TileCharacterCell();
-			}
-		});
+		this.listViewTiles
+				.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
+					@Override
+					public ListCell<Tile> call(ListView<Tile> tiles) {
+						return new TileCharacterCell();
+					}
+				});
 	}
-	
+
 	private void clickTiles() {
-		this.listViewTiles.setOnMouseClicked(new EventHandler<MouseEvent>(){
+		this.listViewTiles.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				if (BabbleGuiController.this.listViewTiles.getItems().size() > 0) {
-					Tile clickedTile = BabbleGuiController.this.listViewTiles.getSelectionModel().getSelectedItem();
+				if (BabbleGuiController.this.listViewTiles.getItems()
+						.size() > 0) {
+					Tile clickedTile = BabbleGuiController.this.listViewTiles
+							.getSelectionModel().getSelectedItem();
 					try {
 						BabbleGuiController.this.tileRack.remove(clickedTile);
 						BabbleGuiController.this.setWordTiles(clickedTile);
-					} catch (TileNotInGroupException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (TileNotInGroupException exc) {
+						exc.printStackTrace();
 					}
 				}
 			}
@@ -133,8 +175,8 @@ public class BabbleGuiController implements Initializable {
 			if (item != null) {
 				setText(String.valueOf(item.getLetter()));
 			} else {
-                setText("");
-            }
+				setText("");
+			}
 		}
 	}
 }
