@@ -19,7 +19,7 @@ public class WordDictionary {
 	 */
 	public WordDictionary() {
 		this.checker = new SpellChecker();
-
+		
 			try {
 				Reader reader = new InputStreamReader(WordDictionary.class.getResourceAsStream("/english.txt"));
 				this.checker.initialize(reader);
