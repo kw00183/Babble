@@ -1,8 +1,10 @@
 package edu.westga.cs.babble.controllers;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,6 +22,7 @@ import edu.westga.cs.babble.model.Tile;
 import edu.westga.cs.babble.model.TileBag;
 import edu.westga.cs.babble.model.TileNotInGroupException;
 import edu.westga.cs.babble.model.TileRack;
+import edu.westga.cs.babble.model.PlayedWord;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -33,7 +36,7 @@ public class BabbleController implements Initializable {
 	@FXML
 	private Label labelTiles;
 	@FXML
-	private ListView<Tile> listViewTiles;
+	private ListView<Tile> listViewRack;
 	@FXML
 	private Label labelYourWord;
 	@FXML
@@ -47,27 +50,33 @@ public class BabbleController implements Initializable {
 	@FXML
 	private TextField textFieldScore;
 
-	private TileRack tileRack;
-	private TileBag tileBag;
+	private PlayedWord word;
+	private TileRack rack;
+	private TileBag bag;
 	private int score;
 
+	/**
+	 * Constructor used to initialize list view and class objects for GUI
+	 */
 	public BabbleController() {
-		this.listViewTiles = new ListView<Tile>();
+		this.listViewRack = new ListView<Tile>();
 		this.listViewWord = new ListView<Tile>();
 		this.score = 0;
-		this.tileBag = new TileBag();
-		this.tileRack = new TileRack();
+		this.bag = new TileBag();
+		this.rack = new TileRack();
+		this.word = new PlayedWord();
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		this.buttonReset.setOnAction(e -> this.resetWordTiles());
+		this.buttonReset.setOnAction(e -> this.resetRackTiles());
 		this.buttonPlayWord.setOnAction(e -> this.playWord());
 		this.setScore();
 
-		this.listViewTiles = this.createTileRack();
-		this.setTiles();
-		this.clickTiles();
+		this.listViewRack = this.createTileRack();
+		this.setRackTiles();
+		this.clickRackTiles();
+		this.clickWordTiles();
 	}
 
 	private void setScore() {
@@ -75,33 +84,23 @@ public class BabbleController implements Initializable {
 	}
 
 	private void playWord() {
-		String word = "";
-		int points = 0;
 		boolean validWord = false;
-		for (Tile tile : this.listViewWord.getItems()) {
-			word += tile.getLetter();
-			points += tile.getPointValue();
-		}
+
 		WordDictionary dictionary = new WordDictionary();
-		validWord = dictionary.isValidWord(word);
+		validWord = dictionary.isValidWord(this.word.getHand());
 
 		if (validWord) {
-			this.score += points;
-			int wordLength = word.length();
-			this.drawNewTiles(wordLength);
-			this.listViewWord.getItems().clear();
+			this.drawNewTiles(this.rack.getNumberOfTilesNeeded());
+			this.score += this.word.getScore();
+			this.word.clear();
 		} else {
 			showMessageDialog(null, "Not a valid word");
 		}
 		this.setScore();
-
-		System.out.println(validWord);
 	}
 
-	private void setWordTiles(Tile tile) {
-		this.listViewWord.getItems().add(tile);
-		this.listViewWord
-				.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
+	private void setWordTiles() {
+		this.listViewWord.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
 
 					@Override
 					public ListCell<Tile> call(ListView<Tile> wordTiles) {
@@ -110,38 +109,37 @@ public class BabbleController implements Initializable {
 				});
 	}
 
-	private void resetWordTiles() {
+	private void resetRackTiles() {
 		for (int index = 0; index < this.listViewWord.getItems()
 				.size(); index++) {
-			this.tileRack.append(this.listViewWord.getItems().get(index));
+			this.listViewRack.getItems().add(this.listViewWord.getItems().get(index));
 		}
-		this.setTiles();
-		this.listViewWord.getItems().clear();
+		this.setRackTiles();
+		this.word.clear();
 	}
 
 	private ListView<Tile> createTileRack() {
 		this.drawNewTiles(TileRack.MAX_SIZE);
-		return this.listViewTiles;
+		return this.listViewRack;
 	}
 
 	private void drawNewTiles(int numberOfTiles) {
 		for (int index = 0; index < numberOfTiles; index++) {
 			try {
-				if (!this.tileBag.isEmpty()) {
-					Tile randomTile = this.tileBag.drawTile();
-					this.tileRack.append(randomTile);
+				if (!this.bag.isEmpty()) {
+					Tile randomTile = this.bag.drawTile();
+					this.rack.append(randomTile);
 				}
 			} catch (EmptyTileBagException exc) {
 				exc.printStackTrace();
 			}
 		}
+		//add observe rack to rack list
+		this.listViewRack.setItems(this.rack.tiles());
 	}
 
-	private void setTiles() {
-		ObservableList<Tile> tiles = this.tileRack.tiles();
-		this.listViewTiles.setItems(tiles);
-
-		this.listViewTiles
+	private void setRackTiles() {
+		this.listViewRack
 				.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
 					@Override
 					public ListCell<Tile> call(ListView<Tile> tiles) {
@@ -150,23 +148,67 @@ public class BabbleController implements Initializable {
 				});
 	}
 
-	private void clickTiles() {
-		this.listViewTiles.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	private void clickRackTiles() {
+		this.listViewRack.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
 			@Override
 			public void handle(MouseEvent arg0) {
-				if (BabbleController.this.listViewTiles.getItems()
+				if (BabbleController.this.listViewRack.getItems()
 						.size() > 0) {
-					Tile clickedTile = BabbleController.this.listViewTiles
+					Tile clickedRackTile = BabbleController.this.listViewRack
 							.getSelectionModel().getSelectedItem();
+					
+					//add to word observable
+					BabbleController.this.word.append(clickedRackTile);
+					
+					//remove from rack observable
 					try {
-						BabbleController.this.tileRack.remove(clickedTile);
-						BabbleController.this.setWordTiles(clickedTile);
-					} catch (TileNotInGroupException exc) {
-						exc.printStackTrace();
+						BabbleController.this.rack.remove(clickedRackTile);
+					} catch (TileNotInGroupException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+
+					//update listviews
+					BabbleController.this.updateListViews();
 				}
 			}
 		});
+	}
+	
+	private void clickWordTiles() {
+		this.listViewWord.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				if (BabbleController.this.listViewWord.getItems()
+						.size() > 0) {
+					Tile clickedWordTile = BabbleController.this.listViewWord
+							.getSelectionModel().getSelectedItem();
+					
+					//remove from word observable
+					try {
+						BabbleController.this.word.remove(clickedWordTile);
+					} catch (TileNotInGroupException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//add to rack observable
+					BabbleController.this.rack.append(clickedWordTile);
+					
+					//update listviews
+					BabbleController.this.updateListViews();
+				}
+			}
+		});
+	}
+	
+	private void updateListViews() {
+		BabbleController.this.listViewRack.setItems(BabbleController.this.rack.tiles());
+		BabbleController.this.listViewWord.setItems(BabbleController.this.word.tiles());
+		
+		BabbleController.this.setWordTiles();
+		BabbleController.this.setRackTiles();
 	}
 
 	static class TileCharacterCell extends ListCell<Tile> {
