@@ -29,7 +29,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
  * @author Kim Weible
  * @version 2021.08.20
  */
-public class BabbleGuiController implements Initializable {
+public class BabbleController implements Initializable {
 	@FXML
 	private Label labelTiles;
 	@FXML
@@ -51,7 +51,7 @@ public class BabbleGuiController implements Initializable {
 	private TileBag tileBag;
 	private int score;
 
-	public BabbleGuiController() {
+	public BabbleController() {
 		this.listViewTiles = new ListView<Tile>();
 		this.listViewWord = new ListView<Tile>();
 		this.score = 0;
@@ -154,13 +154,13 @@ public class BabbleGuiController implements Initializable {
 		this.listViewTiles.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				if (BabbleGuiController.this.listViewTiles.getItems()
+				if (BabbleController.this.listViewTiles.getItems()
 						.size() > 0) {
-					Tile clickedTile = BabbleGuiController.this.listViewTiles
+					Tile clickedTile = BabbleController.this.listViewTiles
 							.getSelectionModel().getSelectedItem();
 					try {
-						BabbleGuiController.this.tileRack.remove(clickedTile);
-						BabbleGuiController.this.setWordTiles(clickedTile);
+						BabbleController.this.tileRack.remove(clickedTile);
+						BabbleController.this.setWordTiles(clickedTile);
 					} catch (TileNotInGroupException exc) {
 						exc.printStackTrace();
 					}
