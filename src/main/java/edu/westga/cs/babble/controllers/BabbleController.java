@@ -101,11 +101,11 @@ public class BabbleController implements Initializable {
 	private void setWordTiles() {
 		this.listViewWord.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
 
-					@Override
-					public ListCell<Tile> call(ListView<Tile> wordTiles) {
-						return new TileCharacterCell();
-					}
-				});
+			@Override
+			public ListCell<Tile> call(ListView<Tile> wordTiles) {
+				return new TileCharacterCell();
+			}
+		});
 	}
 
 	private void resetRackTiles() {
@@ -138,13 +138,12 @@ public class BabbleController implements Initializable {
 	}
 
 	private void setRackTiles() {
-		this.listViewRack
-				.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
-					@Override
-					public ListCell<Tile> call(ListView<Tile> tiles) {
-						return new TileCharacterCell();
-					}
-				});
+		this.listViewRack.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
+			@Override
+			public ListCell<Tile> call(ListView<Tile> tiles) {
+				return new TileCharacterCell();
+			}
+		});
 	}
 
 	private void clickRackTiles() {
@@ -215,6 +214,7 @@ public class BabbleController implements Initializable {
 			super.updateItem(item, empty);
 			if (item != null) {
 				setText(String.valueOf(item.getLetter()));
+				setAccessibleText(String.valueOf(item.getLetter()));
 			} else {
 				setText("");
 			}
