@@ -73,9 +73,23 @@ public class BabbleController implements Initializable {
 		this.setScore();
 
 		this.listViewRack = this.createTileRack();
-		this.setRackTiles();
 		this.clickRackTiles();
 		this.clickWordTiles();
+		
+		this.listViewWord.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
+
+			@Override
+			public ListCell<Tile> call(ListView<Tile> wordTiles) {
+				return new TileCharacterCell();
+			}
+		});
+		
+		this.listViewRack.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
+			@Override
+			public ListCell<Tile> call(ListView<Tile> tiles) {
+				return new TileCharacterCell();
+			}
+		});
 	}
 
 	private void setScore() {
@@ -98,22 +112,11 @@ public class BabbleController implements Initializable {
 		this.setScore();
 	}
 
-	private void setWordTiles() {
-		this.listViewWord.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
-
-			@Override
-			public ListCell<Tile> call(ListView<Tile> wordTiles) {
-				return new TileCharacterCell();
-			}
-		});
-	}
-
 	private void resetRackTiles() {
 		for (int index = 0; index < this.listViewWord.getItems()
 				.size(); index++) {
 			this.listViewRack.getItems().add(this.listViewWord.getItems().get(index));
 		}
-		this.setRackTiles();
 		this.word.clear();
 	}
 
@@ -135,15 +138,6 @@ public class BabbleController implements Initializable {
 		}
 		//add observe rack to rack list
 		this.listViewRack.setItems(this.rack.tiles());
-	}
-
-	private void setRackTiles() {
-		this.listViewRack.setCellFactory(new Callback<ListView<Tile>, ListCell<Tile>>() {
-			@Override
-			public ListCell<Tile> call(ListView<Tile> tiles) {
-				return new TileCharacterCell();
-			}
-		});
 	}
 
 	private void clickRackTiles() {
@@ -204,9 +198,6 @@ public class BabbleController implements Initializable {
 	private void updateListViews() {
 		BabbleController.this.listViewRack.setItems(BabbleController.this.rack.tiles());
 		BabbleController.this.listViewWord.setItems(BabbleController.this.word.tiles());
-		
-		BabbleController.this.setWordTiles();
-		BabbleController.this.setRackTiles();
 	}
 
 	static class TileCharacterCell extends ListCell<Tile> {
