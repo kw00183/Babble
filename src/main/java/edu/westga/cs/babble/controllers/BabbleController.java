@@ -136,7 +136,6 @@ public class BabbleController implements Initializable {
 				exc.printStackTrace();
 			}
 		}
-		//add observe rack to rack list
 		this.listViewRack.setItems(this.rack.tiles());
 	}
 
@@ -150,18 +149,14 @@ public class BabbleController implements Initializable {
 					Tile clickedRackTile = BabbleController.this.listViewRack
 							.getSelectionModel().getSelectedItem();
 					
-					//add to word observable
 					BabbleController.this.word.append(clickedRackTile);
 					
-					//remove from rack observable
 					try {
 						BabbleController.this.rack.remove(clickedRackTile);
-					} catch (TileNotInGroupException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (TileNotInGroupException exc) {
+						exc.printStackTrace();
 					}
 
-					//update listviews
 					BabbleController.this.updateListViews();
 				}
 			}
@@ -177,18 +172,14 @@ public class BabbleController implements Initializable {
 					Tile clickedWordTile = BabbleController.this.listViewWord
 							.getSelectionModel().getSelectedItem();
 					
-					//remove from word observable
 					try {
 						BabbleController.this.word.remove(clickedWordTile);
-					} catch (TileNotInGroupException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (TileNotInGroupException exc) {
+						exc.printStackTrace();
 					}
 					
-					//add to rack observable
 					BabbleController.this.rack.append(clickedWordTile);
 					
-					//update listviews
 					BabbleController.this.updateListViews();
 				}
 			}
