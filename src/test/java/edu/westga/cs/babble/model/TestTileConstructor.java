@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 public class TestTileConstructor {
 	
 	@BeforeEach
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 	}
 
 	@Test

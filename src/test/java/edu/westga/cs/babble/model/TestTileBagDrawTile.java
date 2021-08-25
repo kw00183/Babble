@@ -20,7 +20,7 @@ public class TestTileBagDrawTile {
 	private TileBag bag;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 		this.bag = new TileBag();
 	}
 
