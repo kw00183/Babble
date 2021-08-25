@@ -15,9 +15,6 @@ public class TestTileConstructor {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		String stringLetter = "A";
-		char charLetter = stringLetter.charAt(0);
-		new Tile(charLetter);
 	}
 
 	@Test
