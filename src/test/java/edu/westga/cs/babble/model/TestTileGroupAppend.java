@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import javafx.collections.ObservableList;
 
 /**
- * JUnit test class for Tile model class
+ * JUnit test class for TileGroup model class append method
  * 
  * @author Kim Weible
  * @version 2021.08.25

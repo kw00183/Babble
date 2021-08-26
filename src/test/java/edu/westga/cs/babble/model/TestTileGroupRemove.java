@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit test class for Tile model class
+ * JUnit test class for TileGroup model class remove method
  * 
  * @author Kim Weible
  * @version 2021.08.25
