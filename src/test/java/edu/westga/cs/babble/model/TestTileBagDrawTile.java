@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit test class for TileBag model class
+ * JUnit test class for TileBag model class drawTile method
  * 
  * @author Kim Weible
  * @version 2021.08.25
