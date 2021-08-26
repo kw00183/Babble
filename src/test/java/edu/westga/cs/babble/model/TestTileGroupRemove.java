@@ -13,18 +13,18 @@ import org.junit.jupiter.api.Test;
  */
 public class TestTileGroupRemove {
 
-	private TileRack rack;
+	private Dummy dummy;
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		this.rack = new TileRack();
+		this.dummy = new Dummy();
 	}
 
 	@Test
 	public void shouldNotAllowNull() throws TileNotInGroupException {
 		String message = null;
 		try {
-			this.rack.remove(null);
+			this.dummy.remove(null);
 		} catch (IllegalArgumentException iae) {
 			message = "cannot remove null tile";
 		}
@@ -36,10 +36,10 @@ public class TestTileGroupRemove {
 		String message = null;
 		String stringLetters = "ABBCD";
 		Tile tile1 = new Tile(stringLetters.charAt(0));
-		assertEquals(0, this.rack.tiles().size());
+		assertEquals(0, this.dummy.tiles().size());
 		
 		try {
-			this.rack.remove(tile1);
+			this.dummy.remove(tile1);
 		} catch (TileNotInGroupException tnige) {
 			message = "cannot remove tile from empty group";
 		}
@@ -55,27 +55,27 @@ public class TestTileGroupRemove {
 		Tile tile3 = new Tile(stringLetters.charAt(2));
 		Tile tile4 = new Tile(stringLetters.charAt(3));
 		Tile tile5 = new Tile(stringLetters.charAt(4));
-		this.rack.append(tile1);
-		this.rack.append(tile2);
-		this.rack.append(tile4);
-		this.rack.append(tile5);
+		this.dummy.append(tile1);
+		this.dummy.append(tile2);
+		this.dummy.append(tile4);
+		this.dummy.append(tile5);
 		try {
-			this.rack.remove(tile3);
+			this.dummy.remove(tile3);
 		} catch (TileNotInGroupException tnige) {
 			message = "cannot remove tile not in group";
 		}
 		assertEquals("cannot remove tile not in group", message);
-		assertEquals(4, this.rack.tiles().size());
+		assertEquals(4, this.dummy.tiles().size());
 	}
 	
 	@Test
 	public void canRemoveOnlyTileInTileGroup() throws TileNotInGroupException {
 		String stringLetters = "ABBCD";
 		Tile tile1 = new Tile(stringLetters.charAt(0));
-		this.rack.append(tile1);
-		assertEquals(1, this.rack.tiles().size());
-		this.rack.remove(tile1);
-		assertEquals(0, this.rack.tiles().size());
+		this.dummy.append(tile1);
+		assertEquals(1, this.dummy.tiles().size());
+		this.dummy.remove(tile1);
+		assertEquals(0, this.dummy.tiles().size());
 	}
 	
 	@Test
@@ -86,19 +86,19 @@ public class TestTileGroupRemove {
 		Tile tile3 = new Tile(stringLetters.charAt(2));
 		Tile tile4 = new Tile(stringLetters.charAt(3));
 		Tile tile5 = new Tile(stringLetters.charAt(4));
-		this.rack.append(tile1);
-		this.rack.append(tile2);
-		this.rack.append(tile3);
-		this.rack.append(tile4);
-		this.rack.append(tile5);
-		assertEquals("ABBCD", this.rack.getHand());
+		this.dummy.append(tile1);
+		this.dummy.append(tile2);
+		this.dummy.append(tile3);
+		this.dummy.append(tile4);
+		this.dummy.append(tile5);
+		assertEquals("ABBCD", this.dummy.getHand());
 		
-		for (int index = 0; index < this.rack.tiles().size(); index++) {
+		for (int index = 0; index < this.dummy.tiles().size(); index++) {
 			if (index == 0) {
-				this.rack.remove(this.rack.tiles().get(index));
+				this.dummy.remove(this.dummy.tiles().get(index));
 			}
 		}
-		assertEquals("BBCD", this.rack.getHand());
+		assertEquals("BBCD", this.dummy.getHand());
 	}
 	
 	@Test
@@ -109,19 +109,19 @@ public class TestTileGroupRemove {
 		Tile tile3 = new Tile(stringLetters.charAt(2));
 		Tile tile4 = new Tile(stringLetters.charAt(3));
 		Tile tile5 = new Tile(stringLetters.charAt(4));
-		this.rack.append(tile1);
-		this.rack.append(tile2);
-		this.rack.append(tile3);
-		this.rack.append(tile4);
-		this.rack.append(tile5);
-		assertEquals("ABBCD", this.rack.getHand());
+		this.dummy.append(tile1);
+		this.dummy.append(tile2);
+		this.dummy.append(tile3);
+		this.dummy.append(tile4);
+		this.dummy.append(tile5);
+		assertEquals("ABBCD", this.dummy.getHand());
 		
-		for (int index = 0; index < this.rack.tiles().size(); index++) {
-			if (index == this.rack.tiles().size() - 1) {
-				this.rack.remove(this.rack.tiles().get(index));
+		for (int index = 0; index < this.dummy.tiles().size(); index++) {
+			if (index == this.dummy.tiles().size() - 1) {
+				this.dummy.remove(this.dummy.tiles().get(index));
 			}
 		}
-		assertEquals("ABBC", this.rack.getHand());
+		assertEquals("ABBC", this.dummy.getHand());
 	}
 	
 	@Test
@@ -133,22 +133,22 @@ public class TestTileGroupRemove {
 		Tile tile4 = new Tile(stringLetters.charAt(3));
 		Tile tile5 = new Tile(stringLetters.charAt(4));
 		Tile tile6 = new Tile(stringLetters.charAt(5));
-		this.rack.append(tile1);
-		this.rack.append(tile2);
-		this.rack.append(tile3);
-		this.rack.append(tile4);
-		this.rack.append(tile5);
-		this.rack.append(tile6);
-		assertEquals("ABBCDE", this.rack.getHand());
+		this.dummy.append(tile1);
+		this.dummy.append(tile2);
+		this.dummy.append(tile3);
+		this.dummy.append(tile4);
+		this.dummy.append(tile5);
+		this.dummy.append(tile6);
+		assertEquals("ABBCDE", this.dummy.getHand());
 		
-		for (int index = 0; index < this.rack.tiles().size(); index++) {
-			if ((this.rack.tiles().size() % 2) == 0 && index == (this.rack.tiles().size() / 2) -1) {
-				this.rack.remove(this.rack.tiles().get(index));
-			} else if (index == this.rack.tiles().size() / 2) {
-				this.rack.remove(this.rack.tiles().get(index));
+		for (int index = 0; index < this.dummy.tiles().size(); index++) {
+			if ((this.dummy.tiles().size() % 2) == 0 && index == (this.dummy.tiles().size() / 2) -1) {
+				this.dummy.remove(this.dummy.tiles().get(index));
+			} else if (index == this.dummy.tiles().size() / 2) {
+				this.dummy.remove(this.dummy.tiles().get(index));
 			}
 		}
-		assertEquals("ABCDE", this.rack.getHand());
+		assertEquals("ABCDE", this.dummy.getHand());
 	}
 	
 	@Test
@@ -160,18 +160,18 @@ public class TestTileGroupRemove {
 		Tile tile4 = new Tile(stringLetters.charAt(3));
 		Tile tile5 = new Tile(stringLetters.charAt(4));
 		Tile tile6 = new Tile(stringLetters.charAt(5));
-		this.rack.append(tile1);
-		this.rack.append(tile2);
-		this.rack.append(tile3);
-		this.rack.append(tile4);
-		this.rack.append(tile5);
-		this.rack.append(tile6);
-		assertEquals("ABBCDE", this.rack.getHand());
+		this.dummy.append(tile1);
+		this.dummy.append(tile2);
+		this.dummy.append(tile3);
+		this.dummy.append(tile4);
+		this.dummy.append(tile5);
+		this.dummy.append(tile6);
+		assertEquals("ABBCDE", this.dummy.getHand());
 		
-		this.rack.remove(tile2);
-		this.rack.remove(tile4);
-		this.rack.remove(tile5);
-		assertEquals("ABE", this.rack.getHand());
+		this.dummy.remove(tile2);
+		this.dummy.remove(tile4);
+		this.dummy.remove(tile5);
+		assertEquals("ABE", this.dummy.getHand());
 	}
 	
 	@Test
@@ -184,17 +184,17 @@ public class TestTileGroupRemove {
 		Tile tile4 = new Tile(stringLetters.charAt(3));
 		Tile tile5 = new Tile(stringLetters.charAt(4));
 		Tile tile6 = new Tile(stringLetters.charAt(5));
-		this.rack.append(tile1);
-		this.rack.append(tile2);
-		this.rack.append(tile3);
-		this.rack.append(tile4);
-		this.rack.append(tile5);
-		this.rack.append(tile6);
-		assertEquals("ABBCDE", this.rack.getHand());
+		this.dummy.append(tile1);
+		this.dummy.append(tile2);
+		this.dummy.append(tile3);
+		this.dummy.append(tile4);
+		this.dummy.append(tile5);
+		this.dummy.append(tile6);
+		assertEquals("ABBCDE", this.dummy.getHand());
 		
 		try {
-			this.rack.remove(tile2);
-			this.rack.remove(tile2);
+			this.dummy.remove(tile2);
+			this.dummy.remove(tile2);
 		} catch (TileNotInGroupException tnige) {
 			message = "cannot remove duplicate tile";
 		}
