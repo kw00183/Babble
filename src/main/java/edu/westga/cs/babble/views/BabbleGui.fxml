@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -12,31 +13,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0"
-	prefWidth="350.0" xmlns="http://javafx.com/javafx/14"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="edu.westga.cs.babble.controllers.BabbleGuiController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs.babble.controllers.BabbleController">
 	<columnConstraints>
-		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-			prefWidth="100.0" />
+		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
 	</columnConstraints>
 	<rowConstraints>
 		<RowConstraints />
 		<RowConstraints />
-		<RowConstraints minHeight="10.0" prefHeight="30.0"
-			vgrow="SOMETIMES" />
-		<RowConstraints minHeight="10.0" prefHeight="30.0"
-			vgrow="SOMETIMES" />
-		<RowConstraints minHeight="10.0" prefHeight="30.0"
-			vgrow="SOMETIMES" />
-		<RowConstraints minHeight="10.0" prefHeight="30.0"
-			vgrow="SOMETIMES" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 	</rowConstraints>
 	<children>
-		<VBox alignment="CENTER_LEFT" prefHeight="100.0"
-			prefWidth="350.0" spacing="5.0" GridPane.rowIndex="2"
-			GridPane.rowSpan="2">
+		<VBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="350.0" spacing="5.0" GridPane.rowIndex="2" GridPane.rowSpan="2">
 			<opaqueInsets>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</opaqueInsets>
@@ -49,11 +39,13 @@
 						<Font size="16.0" />
 					</font>
 				</Label>
-				<ListView fx:id="listViewTiles" prefHeight="35.0"
-					prefWidth="330.0" orientation="HORIZONTAL">
+				<ListView fx:id="listViewRack" orientation="HORIZONTAL" prefHeight="35.0" prefWidth="330.0">
 					<VBox.margin>
 						<Insets />
 					</VBox.margin>
+               <tooltip>
+                  <Tooltip text="contains tiles used to build words" />
+               </tooltip>
 				</ListView>
 				<Label fx:id="labelYourWord" text="Your Word">
 					<VBox.margin>
@@ -63,46 +55,49 @@
 						<Font size="16.0" />
 					</font>
 				</Label>
-				<ListView fx:id="listViewWord" prefHeight="35.0"
-                    prefWidth="330.0" orientation="HORIZONTAL">
+				<ListView fx:id="listViewWord" orientation="HORIZONTAL" prefHeight="35.0" prefWidth="330.0">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
+               <tooltip>
+                  <Tooltip text="contains word tiles" />
+               </tooltip>
                 </ListView>
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</padding>
 		</VBox>
-		<HBox alignment="CENTER_RIGHT" prefHeight="75.0"
-			prefWidth="200.0" spacing="10.0" GridPane.rowIndex="4">
+		<HBox alignment="CENTER_RIGHT" prefHeight="75.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="4">
 			<children>
-				<Button fx:id="buttonReset" contentDisplay="RIGHT"
-					mnemonicParsing="false" text="Reset">
+				<Button fx:id="buttonReset" contentDisplay="RIGHT" mnemonicParsing="false" text="Reset">
 					<HBox.margin>
 						<Insets />
 					</HBox.margin>
 					<font>
 						<Font size="16.0" />
 					</font>
+               <tooltip>
+                  <Tooltip text="button resets tile rack with used word tiles" />
+               </tooltip>
 				</Button>
-				<Button fx:id="buttonPlayWord" alignment="CENTER_RIGHT"
-					contentDisplay="RIGHT" minHeight="-Infinity" minWidth="-Infinity"
-					mnemonicParsing="false" text="Play Word">
+				<Button fx:id="buttonPlayWord" alignment="CENTER_RIGHT" contentDisplay="RIGHT" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Play Word">
 					<HBox.margin>
 						<Insets />
 					</HBox.margin>
 					<font>
 						<Font size="16.0" />
 					</font>
+               <tooltip>
+                  <Tooltip text="button plays word created by rack tiles" />
+               </tooltip>
 				</Button>
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</padding>
 		</HBox>
-		<HBox alignment="CENTER_RIGHT" prefHeight="75.0"
-			prefWidth="200.0" spacing="10.0" GridPane.rowIndex="5">
+		<HBox alignment="CENTER_RIGHT" prefHeight="75.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="5">
 			<children>
 				<Label fx:id="labelScore" alignment="CENTER" text="Score:">
 					<opaqueInsets>
@@ -115,14 +110,16 @@
 						<Font size="16.0" />
 					</font>
 				</Label>
-				<TextField fx:id="textFieldScore" alignment="CENTER_LEFT"
-					prefHeight="35.0">
+				<TextField fx:id="textFieldScore" alignment="CENTER_LEFT" prefHeight="35.0">
 					<opaqueInsets>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</opaqueInsets>
 					<HBox.margin>
 						<Insets />
 					</HBox.margin>
+               <tooltip>
+                  <Tooltip text="game score" />
+               </tooltip>
 				</TextField>
 			</children>
 			<padding>
